@@ -1,3 +1,5 @@
+using animalfood;
+
 namespace animalfactory;
 
 class EuropeFactory : ContinentFactory
@@ -11,5 +13,14 @@ class EuropeFactory : ContinentFactory
     {
         return new Carnivore[2]
             {new BrownBear(), new GoldenJackal()};
+    }
+    public override Dictionary<int, Animal> CreateAllAnimals()
+    {
+        Dictionary<int, Animal> animals = new Dictionary<int, Animal>();
+        animals[0] = new Horse();
+        animals[1] = new EuropeanBison();
+        animals[2] = new BrownBear();
+        animals[3] = new GoldenJackal();
+        return animals;
     }
 }
