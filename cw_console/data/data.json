@@ -1,0 +1,12 @@
+{
+  "food": null,
+  "name": "Andrew",
+  "age": 16,
+  "cash": 300,
+  "cardMoney": 400,
+  "wantedTime": 3,
+  "typeOfTicket": {
+    "cost": 300
+  },
+  "ticket": {}
+}

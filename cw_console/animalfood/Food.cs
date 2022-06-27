@@ -4,7 +4,14 @@ public abstract class Food
 {
     public string product;
     public int mass;
-    public abstract string GiveFood(Animal animal);
+    public string GiveFood(Animal animal)
+    {
+        if(animal.GetFood() != null)
+        {
+            return $"The {animal.name} was feed with {animal.GetFood().product}";
+        }
+        else return "";
+    }
 }
 public class Meat : Food
 {
@@ -12,14 +19,6 @@ public class Meat : Food
     {
         this.product = "meat";
         this.mass = mass;
-    }
-    public override string GiveFood(Animal animal)
-    {
-        if(animal.GetFood() != null)
-        {
-            return $"The {animal.name} was feed with {animal.GetFood().product}";
-        }
-        else return "";
     }
 }
 public class Fish : Food
@@ -29,14 +28,6 @@ public class Fish : Food
         this.product = "fish";
         this.mass = mass;
     }
-    public override string GiveFood(Animal animal)
-    {
-        if(animal.GetFood() != null)
-        {
-            return $"The {animal.name} was feed with {animal.GetFood().product}";
-        }
-        else return "";
-    }
 }
 public class Eggs : Food
 {
@@ -44,14 +35,6 @@ public class Eggs : Food
     {
         this.product = "eggs";
         this.mass = mass;
-    }
-    public override string GiveFood(Animal animal)
-    {
-        if(animal.GetFood() != null)
-        {
-            return $"The {animal.name} was feed with {animal.GetFood().product}";
-        }
-        else return "";
     }
 }
 public class Vegetables : Food
@@ -61,14 +44,6 @@ public class Vegetables : Food
         this.product = "vegetables";
         this.mass = mass;
     }
-    public override string GiveFood(Animal animal)
-    {
-        if(animal.GetFood() != null)
-        {
-            return $"The {animal.name} was feed with {animal.GetFood().product}";
-        }
-        else return "";
-    }
 }
 public class Fruits : Food
 {
@@ -76,14 +51,6 @@ public class Fruits : Food
     {
         this.product = "fruits";
         this.mass = mass;
-    }
-    public override string GiveFood(Animal animal)
-    {
-        if(animal.GetFood() != null)
-        {
-            return $"The {animal.name} was feed with {animal.GetFood().product}";
-        }
-        else return "";
     }
 }
 public class Crops : Food
@@ -93,14 +60,6 @@ public class Crops : Food
         this.product = "crops";
         this.mass = mass;
     }
-    public override string GiveFood(Animal animal)
-    {
-        if(animal.GetFood() != null)
-        {
-            return $"The {animal.name} was feed with {animal.GetFood().product}";
-        }
-        else return "";
-    }
 }
 public class Sweets : Food
 {
@@ -108,14 +67,6 @@ public class Sweets : Food
     {
         this.product = "sweets";
         this.mass = mass;
-    }
-    public override string GiveFood(Animal animal)
-    {
-        if(animal.GetFood() != null)
-        {
-            return $"The {animal.name} was feed with {animal.GetFood().product}";
-        }
-        else return "";
     }
 }
 public class Bread : Food
@@ -125,14 +76,6 @@ public class Bread : Food
         this.product = "bread";
         this.mass = mass;
     }
-    public override string GiveFood(Animal animal)
-    {
-        if(animal.GetFood() != null)
-        {
-            return $"The {animal.name} was feed with {animal.GetFood().product}";
-        }
-        else return "";
-    }
 }
 public class Hay : Food
 {
@@ -140,14 +83,6 @@ public class Hay : Food
     {
         this.product = "hay";
         this.mass = mass;
-    }
-    public override string GiveFood(Animal animal)
-    {
-        if(animal.GetFood() != null)
-        {
-            return $"The {animal.name} was feed with {animal.GetFood().product}";
-        }
-        else return "";
     }
 }
 public class Porridge : Food
@@ -157,14 +92,6 @@ public class Porridge : Food
         this.product = "porridge";
         this.mass = mass;
     }
-    public override string GiveFood(Animal animal)
-    {
-        if(animal.GetFood() != null)
-        {
-            return $"The {animal.name} was feed with {animal.GetFood().product}";
-        }
-        else return "";
-    }
 }
 public class TreeBark : Food
 {
@@ -173,14 +100,6 @@ public class TreeBark : Food
         this.product = "tree bark";
         this.mass = mass;
     }
-    public override string GiveFood(Animal animal)
-    {
-        if(animal.GetFood() != null)
-        {
-            return $"The {animal.name} was feed with {animal.GetFood().product}";
-        }
-        else return "";
-    }
 }
 public class CompoundFeed : Food
 {
@@ -188,13 +107,5 @@ public class CompoundFeed : Food
     {
         this.product = "compound feed";
         this.mass = mass;
-    }
-    public override string GiveFood(Animal animal)
-    {
-        if(animal.GetFood() != null)
-        {
-            return $"The {animal.name} was feed with {animal.GetFood().product}";
-        }
-        else return "";
     }
 }

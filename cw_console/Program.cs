@@ -1,5 +1,7 @@
 ﻿using System;
 using static System.Console;
+using System.IO;
+using Newtonsoft.Json;
 using animalfactory;
 using animalfood;
 
@@ -10,25 +12,41 @@ namespace cw_console
         public static void Main()
         {
             Console.Clear();
-            /*Carnivore carnivore = new ArcticFox();
-            WriteLine(carnivore.name);
-            for(int i = 0; i < 10; i++)
-            {
-                carnivore.ImplementFood(foods[i]);
-                if(carnivore.GetFood() != null)
-                    WriteLine(carnivore.GetFood().GiveFood(carnivore));
-            }*/
-            User user = new User();
-            user.name = "Andrew";
-            user.age = 18;
-            user.money = 150;
-            user.wantedTime = 3;
-            user.cardMoney = 600;
-            user.cash = 250;
-            user.SetTypeOfTicket();
+            User user = SetUser();
             AbstZoo zoo = new Zoo();
             AbstZoo controlZoo = new ControlZoo(zoo);
             controlZoo.RunZoo(user);
+        }
+        public static int EnterIntValue(string value, int upperBorder)
+        {
+            while (true)
+            {
+                Write($"Enter your {value}: ");
+                string answer = ReadLine();
+                int num = -1;
+                if (int.TryParse(answer, out num) && int.Parse(answer) >= 0 && int.Parse(answer) < upperBorder)
+                {
+                    num = int.Parse(answer);
+                    return num;
+                }
+                else
+                {
+                    WriteLine($"Your {value} wasn't entered successfully; Please, try again.");
+                }
+            }
+        }
+        public static User SetUser()
+        {
+            User user = new User();
+            Write("Enter a user's name: ");
+            string name = ReadLine();
+            user.name = name;
+            user.wantedTime = 3;
+            user.age = EnterIntValue("age", 70);
+            user.cardMoney = EnterIntValue("card money", 10000);
+            user.cash = EnterIntValue("cash", 10000);
+            user.SetTypeOfTicket();
+            return user;
         }
     }
     public abstract class AbstTypeOfPay
@@ -46,6 +64,7 @@ namespace cw_console
         {
             if (money > cost)
             {
+                WriteLine("Here is your rest, happy day");
                 return true;
             }
             return false;
@@ -59,6 +78,7 @@ namespace cw_console
         }
         public override bool PayForTicket(int cost)
         {
+            WriteLine("Please, put your card to the screen");
             if (money > cost)
             {
                 return true;
@@ -90,16 +110,19 @@ namespace cw_console
                 {
                     WriteLine("Thanks, here is your ticket: ");
                     WriteLine("Also in package with a ticket you can have some food to feed animals");
-                    Food[] foods = new Food[10]
-                    {new Meat(1), new Fish(1), new Eggs(1),
-                        new Vegetables(1), new Fruits(1), new Crops(1),
-                            new Sweets(1), new Bread(1), new Hay(1), new Porridge(1)};
-                    user.food = foods;
                     TicketConstructor constructor = new TicketConstructor();
                     TicketBuilder builder = new ZooTicketWrapper(user);
                     constructor.Construct(builder, user);
                     user.ticket = builder.Ticket;
                     user.ticket.Show();
+                    string json = JsonConvert.SerializeObject(user, Formatting.Indented);
+                    File.WriteAllText(@".\data\data.json", json);
+                    Food[] foods = new Food[10]
+                    {new Meat(1), new Fish(1), new Eggs(1),
+                        new Vegetables(1), new Fruits(1), new Crops(1),
+                            new Sweets(1), new Bread(1), new Hay(1), new Porridge(1)};
+                    user.food = foods;
+                    WriteLine();
                     zoo.RunZoo(user);
                 }
                 else
@@ -148,8 +171,9 @@ namespace cw_console
             WriteLine("Let's start our trip to the animal world in our 5 departments of different animals");
             for (int i = 0; i < 5; i++)
             {
-                departments[0].RunZooDepartment(user);
+                departments[i].RunZooDepartment(user);
             }
+            WriteLine("Thanks for attending, come here again!");
         }
     }
     public class ZooDepartment
@@ -157,7 +181,7 @@ namespace cw_console
         protected Herbivore[] _herbivore;
         protected Carnivore[] _carnivore;
         protected string depName;
-        protected Dictionary<int, Animal> animals 
+        protected Dictionary<int, Animal> animals
             = new Dictionary<int, Animal>();
         public ZooDepartment(ContinentFactory factory, string depName)
         {
@@ -168,16 +192,30 @@ namespace cw_console
         }
         public void RunZooDepartment(User user)
         {
+            WriteLine();
             while (true)
             {
-                WriteLine($"Do you want to feed the animals? Department: {this.depName}");
+                WriteLine("We have such offers for you: feed animals(feed), know fact about animal(fact), exit");
+                WriteLine($"What do you want? Department: {this.depName}");
                 string answer = ReadLine();
-                if (answer == "yes")
+                if (answer == "feed")
                 {
-                    WriteLine("Choose an animal to feed, at this department we have:");
                     FeedAnimal(user);
+                    WriteLine();
                 }
-                else break;
+                else if (answer == "fact")
+                {
+                    KnowAnimal(user);
+                    WriteLine();
+                }
+                else if (answer == "exit")
+                {
+                    break;
+                }
+                else
+                {
+                    WriteLine($"Unknown command `{answer}`, try some from the list");
+                }
             }
         }
         public void FeedAnimal(User user)
@@ -188,19 +226,40 @@ namespace cw_console
                 ShowAnimals();
                 string answer = ReadLine();
                 int num = 0;
-                if(int.TryParse(answer, out num) && int.Parse(answer) >= 0 && int.Parse(answer) < animals.Count())
+                if (int.TryParse(answer, out num) && int.Parse(answer) >= 0 && int.Parse(answer) < animals.Count())
                 {
                     Animal animal = animals[int.Parse(answer)];
                     Food food = ChooseFood(user);
                     animal.ImplementFood(food);
-                    if(animal.GetFood() != null)
+                    if (animal.GetFood() != null)
                         WriteLine(animal.GetFood().GiveFood(animal));
+                    break;
                 }
                 else
                 {
-                    WriteLine("Hope, you enjoyed it");
+                    WriteLine("Your input wasn't correct, please try again");
                 }
-                break;
+            }
+        }
+        public void KnowAnimal(User user)
+        {
+            while (true)
+            {
+                WriteLine($"Enter the number of animal, you want to know better: (from 0 to {animals.Count() - 1})");
+                ShowAnimals();
+                string answer = ReadLine();
+                int num = 0;
+                if (int.TryParse(answer, out num) && int.Parse(answer) >= 0 && int.Parse(answer) < animals.Count())
+                {
+                    Animal animal = animals[int.Parse(answer)];
+                    WriteLine($"Interesting fact about {animal.name}: ");
+                    WriteLine(animal.GetInterestingFact());
+                    break;
+                }
+                else
+                {
+                    WriteLine("Your input wasn't correct, please try again");
+                }
             }
         }
         public Food ChooseFood(User user)
@@ -211,7 +270,7 @@ namespace cw_console
                 ShowFood(user);
                 string answer = ReadLine();
                 int num = 0;
-                if(int.TryParse(answer, out num) && int.Parse(answer) >= 0 && int.Parse(answer) < user.food.Length)
+                if (int.TryParse(answer, out num) && int.Parse(answer) >= 0 && int.Parse(answer) < user.food.Length)
                 {
                     Food food = user.food[int.Parse(answer)];
                     return food;
@@ -318,7 +377,6 @@ namespace cw_console
     public class User
     {
         public Food[] food;
-        public int money;
         public string name;
         public int age;
         public int cash;
