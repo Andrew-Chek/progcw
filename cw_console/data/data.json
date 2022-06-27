@@ -1,8 +1,8 @@
 {
   "food": null,
   "name": "Andrew",
-  "age": 16,
-  "cash": 300,
+  "age": 17,
+  "cash": 400,
   "cardMoney": 400,
   "wantedTime": 3,
   "typeOfTicket": {
